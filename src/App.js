@@ -1,12 +1,13 @@
-import React from 'react';
-import { DropzoneArea } from 'material-ui-dropzone';
-import logo from './logo.svg';
+import React, {useState} from 'react';
+import SideBar from './components/SideBar'
 import './App.css';
 
 function App() {
+  const [tileSets, updateTileSets] = useState([])
+
   return (
     <div className="App">
-      <DropzoneArea/>
+      <SideBar tileSets={tileSets} updateTileSets={updateTileSets}/>
     </div>
   );
 }
