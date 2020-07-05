@@ -1,9 +1,7 @@
-import React from 'react';
-class ImageSplit extends React.Component {
+import React, {useState} from 'react';
+function ImageSplit(props){
 
-    constructor(props) {
-        super(props);
-        this.state = { tiles: null };
+        const [tiles, updateTiles] = useState(null)
         let l = this;
 
         var c = document.getElementById("canvas"),
@@ -33,7 +31,6 @@ class ImageSplit extends React.Component {
                     l.state = { tiles: getTiles() };
 
 
-                }
             }
         }
 
@@ -108,10 +105,8 @@ class ImageSplit extends React.Component {
         }
 
     }
-    render() {
-        console.log('hello');
-        console.log()
-        return (<div></div>);
-    }
+
+    return (<div></div>);
+
 }
 export default ImageSplit;
