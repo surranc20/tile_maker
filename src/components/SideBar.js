@@ -9,7 +9,7 @@ function SideBar(props) {
             ? <MyDropzone
                 tileSets={props.tileSets}
                 updateTileSets={props.updateTileSets}/>
-            : <ImageSplit/>}
+            : <ImageSplit tileSets={props.tileSets}/>}
 
         </div>
     );
