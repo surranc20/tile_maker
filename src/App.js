@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
+import Grid from '@material-ui/core/Grid'
 import SideBar from './components/SideBar'
+import TileMap from './components/TileMap'
 import './App.css';
 
 function App() {
@@ -7,9 +9,20 @@ function App() {
 
   return (
     <div className="App">
-      <SideBar
-        tileSets={tileSets}
-        updateTileSets={updateTileSets}/>
+      <Grid container spacing={3}>
+        <Grid item sm={4}>
+          <SideBar
+            tileSets={tileSets}
+            updateTileSets={updateTileSets}
+          />
+        </Grid>
+        <Grid item>
+          <TileMap>
+
+          </TileMap>
+        </Grid>
+
+      </Grid>
     </div>
   );
 }
