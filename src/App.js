@@ -7,7 +7,9 @@ function App() {
 
   return (
     <div className="App">
-      <SideBar tileSets={tileSets} updateTileSets={updateTileSets}/>
+      <SideBar
+        tileSets={tileSets}
+        updateTileSets={updateTileSets}/>
     </div>
   );
 }
