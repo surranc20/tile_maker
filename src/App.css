@@ -5,9 +5,25 @@
   padding: 20px;
 }
 
+.App h1 {
+  font-family: 'Pokemon Solid', Arial, Helvetica, sans-serif;
+  font-size: 70px;
+  color: #ffcb03;
+  -webkit-text-stroke-width: 4px;
+  -webkit-text-stroke-color: #3e569e;
+  letter-spacing: 4px;
+
+
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.PokemonLogo {
+  padding-top: 10px;
+  padding-bottom: 50px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

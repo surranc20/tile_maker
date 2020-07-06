@@ -9,7 +9,8 @@ function App() {
 
   return (
     <div className="App">
-      <Grid container spacing={3}>
+      <h1>Pokemon Tile Map Maker</h1>
+      <Grid container spacing={3} >
         <Grid item sm={4}>
           <SideBar
             tileSets={tileSets}
