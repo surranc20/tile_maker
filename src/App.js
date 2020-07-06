@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <h1>Pokemon Tile Map Maker</h1>
       <Grid container spacing={3} >
-        <Grid item sm={4}>
+        <Grid item sm={4} >
           <SideBar
             tileSets={tileSets}
             updateTileSets={updateTileSets}

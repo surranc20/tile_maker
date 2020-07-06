@@ -12,8 +12,6 @@
   -webkit-text-stroke-width: 4px;
   -webkit-text-stroke-color: #3e569e;
   letter-spacing: 4px;
-
-
 }
 
 .App-logo {
@@ -25,6 +23,22 @@
   padding-top: 10px;
   padding-bottom: 50px;
 }
+
+.SideBar {
+  height: 70vmin;
+}
+
+.FileUpload {
+  height: 100%;
+}
+
+.FileUpload .MuiDropzoneArea-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

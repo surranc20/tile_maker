@@ -23,10 +23,8 @@ function FileUpload(props) {
 
     return (
         <div className="FileUpload">
-            <div className="DropZone">
                 <DropzoneArea onDrop={onDrop} filesLimit={1} acceptedFiles={['.png']}
                 dropzoneText="Drag tile set here! (Or browse computer for tileset)"></DropzoneArea>
-            </div>
         </div>
     );
 }

@@ -4,7 +4,7 @@ import ImageSplit from './ImageSplit'
 
 function SideBar(props) {
     return (
-        <div>
+        <div class="SideBar">
             {props.tileSets.length === 0
             ? <MyDropzone
                 tileSets={props.tileSets}
