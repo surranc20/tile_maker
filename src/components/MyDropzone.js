@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
-import { DropzoneArea } from 'material-ui-dropzone';
-import { useTheme } from '@material-ui/core/styles';
+import React, { useCallback } from 'react'
+import { DropzoneArea } from 'material-ui-dropzone'
 
 
 function FileUpload(props) {
@@ -19,7 +18,7 @@ function FileUpload(props) {
             reader.readAsArrayBuffer(file)
         })
 
-    }, [acceptedFileHandler])
+    }, [acceptedFileHandler, props.tileSets])
 
     return (
         <div className="FileUpload">
@@ -29,4 +28,4 @@ function FileUpload(props) {
     );
 }
 
-export default FileUpload;
+export default FileUpload

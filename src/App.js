@@ -17,8 +17,8 @@ function App() {
             updateTileSets={updateTileSets}
           />
         </Grid>
-        <Grid item>
-          <TileMap>
+        <Grid item sm={8}>
+          <TileMap tileSize={[16, 16]}>
 
           </TileMap>
         </Grid>
