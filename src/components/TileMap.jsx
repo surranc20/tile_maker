@@ -3,18 +3,23 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Tile from './Tile';
+import TileMapInfoForm from './TileMapInfoForm';
 
-function TileMap({ tileSize }) {
+function TileMap({ mapInfo }) {
+  const {
+    rows, columns, width, height, name,
+  } = mapInfo;
+
   const [tileMap, updateTileMap] = useState([]);
   useEffect(() => {
-    const tile = <Tile tileSize={tileSize} scale={2} />;
-    const matrix = Array(13).fill(0).map(() => new Array(13).fill(tile));
+    const tile = <Tile tileSize={[width, height]} scale={2} />;
+    const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(tile));
     updateTileMap(matrix);
-  }, []);
+  }, [rows, columns, width, height]);
 
   return (
     <Grid container direction="column">
-      { tileMap.map((row) => <TileMapRow row={row} key={uuid()} />) }
+      {tileMap.map((row) => <TileMapRow row={row} key={uuid()} />)}
     </Grid>
   );
 }
@@ -22,17 +27,34 @@ function TileMap({ tileSize }) {
 function TileMapRow({ row }) {
   return (
     <Grid container>
-      { row.map((tile) => <Grid item key={uuid()}>{tile}</Grid>) }
+      {row.map((tile) => <Grid item key={uuid()}>{tile}</Grid>)}
     </Grid>
   );
 }
 
+function TileMapSpot() {
+  const [formInfo, updateFormInfo] = useState(null);
+  return (
+    <div>
+      {formInfo === null
+        ? <TileMapInfoForm updateFormInfo={updateFormInfo} />
+        : <TileMap mapInfo={formInfo} />}
+    </div>
+  );
+}
+
 TileMap.propTypes = {
-  tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  mapInfo: PropTypes.shape({
+    rows: PropTypes.number.isRequired,
+    columns: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 TileMapRow.propTypes = {
   row: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default TileMap;
+export default TileMapSpot;
