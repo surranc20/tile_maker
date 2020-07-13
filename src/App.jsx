@@ -4,7 +4,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Grid from '@material-ui/core/Grid';
 import SideBar from './components/SideBar';
 import TileMapSpot from './components/TileMap';
-import DragablePok from './components/DragablePok';
 
 import './App.css';
 
@@ -26,7 +25,7 @@ function App() {
             <TileMapSpot />
           </Grid>
         </Grid>
-        <DragablePok />
+        {/* <DragablePok /> */}
       </DndProvider>
     </div>
   );

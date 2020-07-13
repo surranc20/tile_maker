@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MyDropzone from './MyDropzone';
-import ImageSplit from './ImageSplit';
+import TileSet from './TileSet';
 
 function SideBar({ tileSets, updateTileSets }) {
   return (
@@ -13,7 +13,7 @@ function SideBar({ tileSets, updateTileSets }) {
             updateTileSets={updateTileSets}
           />
         )
-        : <ImageSplit tileSets={tileSets} />}
+        : <TileSet tileSets={tileSets} />}
     </div>
   );
 }
