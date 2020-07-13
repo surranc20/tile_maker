@@ -1,77 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import uuid from 'react-uuid';
 import { CircularProgress, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import TileSetTile from './TileSetTile';
 
 function DisplayTileSet({ tileSets }) {
-  const [imgSrc, setSrc] = useState(null);
-  const [rows, setRows] = useState(null);
-  const [columns, setColumns] = useState(null);
+  const [tileArray, setTileArray] = useState([]);
   const tileSize = [16, 16];
+
+  // Break tilesheet png into tiles and add all these tiles to an array to display.
   useEffect(() => {
     const reader = new FileReader();
     reader.readAsDataURL(tileSets[0]);
     reader.onload = () => {
       const { result } = reader;
-      setSrc(result);
-      const img = new Image();
+      const img = new Image(); // Will be used to get the dimensions of the sheet.
       img.src = result;
+
+      // Get the dimensions of the sheet and then create the array of tiles.
       img.onload = () => {
-        setRows(parseInt(img.height / tileSize[1], 10));
-        setColumns(parseInt(img.width / tileSize[0], 10));
+        const rows = parseInt(img.height / tileSize[1], 10);
+        const columns = parseInt(img.width / tileSize[0], 10);
+
+        // Create a 2d array with the same shape as our tile sheet.
+        const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(0));
+
+        // Use this array to create an array filled with tiles.
+        const tileSetMatrix = matrix.map((row, rowIndex) => row.map((column, columnIndex) => (
+          <TileSetTile
+            tileBackground={{ background: `url(${result})` }}
+            rowNum={rowIndex}
+            columnNum={columnIndex}
+            tileSize={tileSize}
+          />
+        )));
+
+        // Flatten array so that it can be mapped in a grid.
+        const tileSetArray = tileSetMatrix.flat();
+        setTileArray(tileSetArray);
       };
     };
-  }, []);
-
-
+  }, [tileSets, tileSize]);
 
   return (
     <div>
-      {columns === null
+      {tileArray === []
         ? <CircularProgress />
-        : <TileSet tilesImg={imgSrc} rows={rows} columns={columns} tileSize={tileSize} />}
+        : <TileSet tileArray={tileArray} />}
     </div>
   );
 }
 
-function TileSet({ tilesImg, rows, columns, tileSize }) {
-  const [shapedMatrix, setShapedMatrix] = useState([]);
-  useEffect(() => {
-    const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(0));
-    setShapedMatrix(matrix);
-  }, [tilesImg, rows, columns]);
-
-  return (
-    <Grid container>
-
-        {shapedMatrix.map((row, rowIndex) => <TileSetRow row={row} rowNum={rowIndex} key={uuid()} tilesImg={tilesImg} tileSize={tileSize}/>)}
-
-    </Grid>
-  );
-}
-
-function TileSetRow({ row, rowNum, tilesImg, tileSize }) {
-  const myStyle = {
-    width: `${tileSize[0]}px`,
-    height: `${tileSize[1]}px`,
-    background: `url(${tilesImg})`,
-    outline: '1px solid #3e569e',
-
-  };
+function TileSet({ tileArray }) {
   return (
     <div>
-      {row.map((tile, columnIndex) => <Grid item> <TileSetTile myStyle={myStyle} rowNum={rowNum} columnNum={columnIndex} tileSize={tileSize} /> </Grid>)}
+      <Grid container>
+        {tileArray.map((tile) => tile)}
+      </Grid>
     </div>
   );
 }
 
-// TileSet.propTypes = {
-//   tileSet: PropTypes.,
-// };
+DisplayTileSet.propTypes = {
+  tileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+TileSet.propTypes = {
+  tileArray: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default DisplayTileSet;
-
-
-// TODO: clean up to one file

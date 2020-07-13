@@ -4,8 +4,13 @@ import MyDropzone from './MyDropzone';
 import TileSet from './TileSet';
 
 function SideBar({ tileSets, updateTileSets }) {
+  const style = {
+    height: '70vmin',
+    overflow: 'auto',
+  };
+
   return (
-    <div className="SideBar">
+    <div style={style}>
       {tileSets.length === 0
         ? (
           <MyDropzone
