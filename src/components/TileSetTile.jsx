@@ -6,20 +6,23 @@ import { ItemTypes } from './ItemTypes';
 // eslint-disable-next-line object-curly-newline
 function TileSetTile({ tileBackground, rowNum, columnNum, tileSize }) {
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.DROPTILE, rowNum, columnNum },
+    item: {
+      type: ItemTypes.DROPTILE, rowNum, columnNum, tileBackground, tileSize,
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
   const xBackgroundOffset = -columnNum * tileSize[0];
   const yBackgroundOffset = -rowNum * tileSize[1];
+
   const style = {
     width: `${tileSize[0]}px`,
     height: `${tileSize[1]}px`,
     outline: '1px solid #3e569e',
     backgroundPosition: `${xBackgroundOffset}px ${yBackgroundOffset}px`,
     opacity: isDragging ? 0.5 : 1,
-
+    cursor: 'move',
   };
 
   return (
@@ -28,7 +31,9 @@ function TileSetTile({ tileBackground, rowNum, columnNum, tileSize }) {
 }
 
 TileSetTile.propTypes = {
-  tileBackground: PropTypes.objectOf().isRequired,
+  tileBackground: PropTypes.shape({
+
+  }).isRequired,
   rowNum: PropTypes.number.isRequired,
   columnNum: PropTypes.number.isRequired,
   tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,

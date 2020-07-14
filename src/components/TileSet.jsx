@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
-
+import uuid from 'react-uuid';
 import TileSetTile from './TileSetTile';
 
 function DisplayTileSet({ tileSets }) {
@@ -40,7 +40,7 @@ function DisplayTileSet({ tileSets }) {
         setTileArray(tileSetArray);
       };
     };
-  }, [tileSets, tileSize]);
+  }, [tileSets]);
 
   return (
     <div>
@@ -55,7 +55,11 @@ function TileSet({ tileArray }) {
   return (
     <div>
       <Grid container>
-        {tileArray.map((tile) => tile)}
+        {tileArray.map((tile) => (
+          <Grid item key={uuid()}>
+            {tile}
+          </Grid>
+        ))}
       </Grid>
     </div>
   );
