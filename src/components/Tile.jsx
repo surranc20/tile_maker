@@ -5,8 +5,13 @@ import AutoScale from 'react-auto-scale';
 import { ItemTypes } from './ItemTypes';
 
 function EmptyTile() {
+  const style = {
+    outline: '1px solid #3e569e',
+    width: '100%',
+    height: '100%',
+  };
   return (
-    <div />
+    <div style={style} />
   );
 }
 
@@ -29,7 +34,6 @@ function FilledTile({ tileInfo, tileSize }) {
 
 function Tile({ tileSize, scale }) {
   const style = {
-    outline: '1px solid #3e569e',
     width: tileSize[0] * scale,
     height: tileSize[1] * scale,
     position: 'relative',
