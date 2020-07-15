@@ -34,8 +34,13 @@ function TileMapRow({ row }) {
 
 function TileMapSpot() {
   const [formInfo, updateFormInfo] = useState(null);
+  const style = {
+    height: '70vmin',
+    padding: '1px',
+    overflow: 'auto',
+  };
   return (
-    <div>
+    <div style={style}>
       {formInfo === null
         ? <TileMapInfoForm updateFormInfo={updateFormInfo} />
         : <TileMap mapInfo={formInfo} />}
