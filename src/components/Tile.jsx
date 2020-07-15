@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import AutoScale from 'react-auto-scale';
 import { ItemTypes } from './ItemTypes';
 
 function EmptyTile() {
@@ -9,17 +10,17 @@ function EmptyTile() {
   );
 }
 
-function FilledTile({ tileInfo }) {
+function FilledTile({ tileInfo, tileSize }) {
   const {
-    rowNum, columnNum, tileBackground, tileSize,
+    rowNum, columnNum, tileBackground, dropTileSize,
   } = tileInfo;
 
-  const xBackgroundOffset = -columnNum * tileSize[0];
-  const yBackgroundOffset = -rowNum * tileSize[1];
+  const xBackgroundOffset = -columnNum * dropTileSize[0];
+  const yBackgroundOffset = -rowNum * dropTileSize[1];
   const style = {
     backgroundPosition: `${xBackgroundOffset}px ${yBackgroundOffset}px`,
-    width: '100%',
-    height: '100%',
+    width: `${tileSize[0]}px`,
+    height: `${tileSize[1]}px`,
   };
   return (
     <div style={{ ...tileBackground, ...style }} />
@@ -45,7 +46,7 @@ function Tile({ tileSize, scale }) {
         columnNum: props.columnNum,
         // eslint-disable-next-line react/prop-types
         tileBackground: props.tileBackground,
-        tileSize: props.tileSize,
+        dropTileSize: props.tileSize,
       });
     },
     collect: (monitor) => ({
@@ -58,7 +59,7 @@ function Tile({ tileSize, scale }) {
     <div style={style} ref={drop}>
       {tile === null
         ? EmptyTile()
-        : <FilledTile tileInfo={tile} />}
+        : <AutoScale><FilledTile tileInfo={tile} tileSize={tileSize} /></AutoScale>}
       {isOver && (
         <div
           style={{
@@ -82,12 +83,16 @@ Tile.propTypes = {
   scale: PropTypes.number.isRequired,
 };
 
+// Note: tileInfo.tileSize is the tileSize of the tileSetTile being dragged into the tile.
+// tileSize is the actual size of the tile on the tile map. If these are different an error
+// should propbably be thrown.
 FilledTile.propTypes = {
+  tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   tileInfo: PropTypes.shape({
     rowNum: PropTypes.number.isRequired,
     columnNum: PropTypes.number.isRequired,
     tileBackground: PropTypes.string.isRequired,
-    tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+    dropTileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   }).isRequired,
 };
 

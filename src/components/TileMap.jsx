@@ -12,7 +12,7 @@ function TileMap({ mapInfo }) {
 
   const [tileMap, updateTileMap] = useState([]);
   useEffect(() => {
-    const tile = <Tile tileSize={[width, height]} scale={1} />;
+    const tile = <Tile tileSize={[width, height]} scale={3} />;
     const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(tile));
     updateTileMap(matrix);
   }, [rows, columns, width, height]);
