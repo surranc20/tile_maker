@@ -25,7 +25,6 @@ function App() {
             <TileMapSpot />
           </Grid>
         </Grid>
-        {/* <DragablePok /> */}
       </DndProvider>
     </div>
   );
