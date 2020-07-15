@@ -95,7 +95,9 @@ FilledTile.propTypes = {
   tileInfo: PropTypes.shape({
     rowNum: PropTypes.number.isRequired,
     columnNum: PropTypes.number.isRequired,
-    tileBackground: PropTypes.string.isRequired,
+    tileBackground: PropTypes.shape({
+      background: PropTypes.string.isRequired,
+    }).isRequired,
     dropTileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   }).isRequired,
 };

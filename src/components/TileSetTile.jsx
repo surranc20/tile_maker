@@ -32,7 +32,7 @@ function TileSetTile({ tileBackground, rowNum, columnNum, tileSize }) {
 
 TileSetTile.propTypes = {
   tileBackground: PropTypes.shape({
-
+    background: PropTypes.string.isRequired,
   }).isRequired,
   rowNum: PropTypes.number.isRequired,
   columnNum: PropTypes.number.isRequired,
