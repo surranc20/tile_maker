@@ -11,7 +11,7 @@ class Tile {
   }
 
   toJSON() {
-    return { tileBackground: this.tileBackground };
+    return { tileBackground: this.tileBackground, key: this.key };
   }
 }
 
