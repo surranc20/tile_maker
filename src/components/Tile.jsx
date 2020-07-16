@@ -14,7 +14,7 @@ function EmptyTile() {
   );
 }
 
-function FilledTile({ tileBackground, tileSize }) {
+function FilledTile({ tileBackground, tileSize, scale }) {
   const { background, rowNum, columnNum } = tileBackground;
 
   const xBackgroundOffset = -columnNum * tileSize[0];
@@ -23,6 +23,8 @@ function FilledTile({ tileBackground, tileSize }) {
     backgroundPosition: `${xBackgroundOffset}px ${yBackgroundOffset}px`,
     width: `${tileSize[0]}px`,
     height: `${tileSize[1]}px`,
+    transform: `scale(${scale}, ${scale})`,
+    transformOrigin: 'left top',
   };
   return (
     <div style={{ ...background, ...style }} />
@@ -60,7 +62,7 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
     <div style={style} ref={drop}>
       {tileBackground === null
         ? EmptyTile()
-        : <FilledTile tileBackground={tileBackground} tileSize={tileSize} />}
+        : <FilledTile tileBackground={tileBackground} tileSize={tileSize} scale={scale} />}
       {isOver && (
         <div
           style={{
@@ -110,6 +112,7 @@ FilledTile.propTypes = {
     rowNum: PropTypes.number.isRequired,
     columnNum: PropTypes.number.isRequired,
   }).isRequired,
+  scale: PropTypes.number.isRequired,
 };
 
 export default Tile;
