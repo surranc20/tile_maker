@@ -47,6 +47,8 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
         // eslint-disable-next-line react/prop-types
         columnNum: props.columnNum,
         background: props.tileBackground,
+        // eslint-disable-next-line react/prop-types
+        tileSetName: props.tileSetName,
       });
     },
     collect: (monitor) => ({

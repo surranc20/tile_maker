@@ -7,6 +7,7 @@ import TileSetTile from './TileSetTile';
 function DisplayTileSet({ tileSets }) {
   const [tileArray, setTileArray] = useState([]);
   const tileSize = [16, 16];
+  const tileSetName = tileSets[0].name;
 
   // Break tilesheet png into tiles and add all these tiles to an array to display.
   useEffect(() => {
@@ -32,6 +33,7 @@ function DisplayTileSet({ tileSets }) {
             rowNum={rowIndex}
             columnNum={columnIndex}
             tileSize={tileSize}
+            tileSetName={tileSetName}
           />
         )));
 

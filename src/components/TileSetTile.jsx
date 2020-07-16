@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { ItemTypes } from './ItemTypes';
 
 // eslint-disable-next-line object-curly-newline
-function TileSetTile({ tileBackground, rowNum, columnNum, tileSize }) {
+function TileSetTile({ tileBackground, rowNum, columnNum, tileSize, tileSetName }) {
   const [{ isDragging }, drag] = useDrag({
     item: {
-      type: ItemTypes.DROPTILE, rowNum, columnNum, tileBackground, tileSize,
+      type: ItemTypes.DROPTILE, rowNum, columnNum, tileBackground, tileSize, tileSetName,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -37,6 +37,7 @@ TileSetTile.propTypes = {
   rowNum: PropTypes.number.isRequired,
   columnNum: PropTypes.number.isRequired,
   tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tileSetName: PropTypes.string.isRequired,
 };
 
 export default TileSetTile;
