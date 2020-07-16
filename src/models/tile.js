@@ -9,6 +9,10 @@ class Tile {
     this.scale = scale;
     this.key = uuid();
   }
+
+  toJSON() {
+    return { tileBackground: this.tileBackground };
+  }
 }
 
 export default Tile;
