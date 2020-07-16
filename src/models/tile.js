@@ -21,7 +21,7 @@ class Tile {
     } else {
       backgroundInfo = this.tileBackground;
     }
-    return { tileBackground: backgroundInfo, key: this.key };
+    return { tileBackground: backgroundInfo };
   }
 }
 
