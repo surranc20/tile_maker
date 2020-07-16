@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import { Button } from '@material-ui/core';
 
 import TileModel from '../models/tile';
 import Tile from './Tile';
@@ -25,6 +26,22 @@ function TileMap({ mapInfo }) {
     updateTileMap(tempTileMap);
   }
 
+  async function downloadFile() {
+    const filename = `${name}_tiled.json`;
+    const jsonStr = JSON.stringify(tileMap);
+
+    const element = document.createElement('a');
+    element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(jsonStr)}`);
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
   return (
     <Grid container direction="column">
       {tileMap.map((row) => (
@@ -34,6 +51,14 @@ function TileMap({ mapInfo }) {
           updateTile={updateTile}
         />
       ))}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={downloadFile}
+        style={{ height: '56px' }}
+      >
+        Create Map
+      </Button>
     </Grid>
   );
 }
