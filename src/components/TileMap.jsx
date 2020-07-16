@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
 
 import TileModel from '../models/tile';
+import TileRowModel from '../models/tile_row';
 import Tile from './Tile';
 import TileMapInfoForm from './TileMapInfoForm';
 
@@ -14,15 +15,18 @@ function TileMap({ mapInfo }) {
 
   const [tileMap, updateTileMap] = useState([]);
   useEffect(() => {
-    // The next 2 lines simply create a 2d matrix filled with TileModels for each spot in matrix.
-    const matrix = Array.from({ length: rows }, (_, rowNum) => Array.from({ length: columns },
-      (__, colNum) => new TileModel(colNum, rowNum, null, [width, height], 2)));
+    // The next three lines simply create an array filled with tile rows. These
+    // rows each hold their own uinque key as well as the tiles that comprise the row.
+    const matrix = Array.from({ length: rows },
+      (_, rowNum) => new TileRowModel(Array.from({ length: columns },
+        (__, colNum) => new TileModel(colNum, rowNum, null, [width, height], 2))));
+
     updateTileMap(matrix);
   }, [rows, columns, width, height]);
 
   function updateTile(xPos, yPos, tileBackground) {
     const tempTileMap = [...tileMap];
-    tempTileMap[yPos][xPos].tileBackground = tileBackground;
+    tempTileMap[yPos].row[xPos].tileBackground = tileBackground;
     updateTileMap(tempTileMap);
   }
 
@@ -44,10 +48,10 @@ function TileMap({ mapInfo }) {
 
   return (
     <Grid container direction="column">
-      {tileMap.map((row) => (
+      {tileMap.map((tileRow) => (
         <TileMapRow
-          row={row}
-          key={JSON.stringify(row)}
+          row={tileRow.row}
+          key={tileRow.key}
           updateTile={updateTile}
         />
       ))}
