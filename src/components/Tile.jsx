@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import AutoScale from 'react-auto-scale';
@@ -15,43 +15,33 @@ function EmptyTile() {
   );
 }
 
-function FilledTile({ tileInfo, tileSize }) {
-  const {
-    rowNum, columnNum, tileBackground, dropTileSize,
-  } = tileInfo;
+function FilledTile({ tileBackground, tileSize }) {
+  const { background, rowNum, columnNum } = tileBackground;
 
-  const xBackgroundOffset = -columnNum * dropTileSize[0];
-  const yBackgroundOffset = -rowNum * dropTileSize[1];
+  const xBackgroundOffset = -columnNum * tileSize[0];
+  const yBackgroundOffset = -rowNum * tileSize[1];
   const style = {
     backgroundPosition: `${xBackgroundOffset}px ${yBackgroundOffset}px`,
     width: `${tileSize[0]}px`,
     height: `${tileSize[1]}px`,
   };
   return (
-    <div style={{ ...tileBackground, ...style }} />
+    <div style={{ ...background, ...style }} />
   );
 }
 
-function Tile({ tileSize, scale }) {
+// eslint-disable-next-line object-curly-newline
+function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
   const style = {
     width: tileSize[0] * scale,
     height: tileSize[1] * scale,
     position: 'relative',
   };
 
-  const [tile, updateTile] = useState(null);
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.DROPTILE,
     drop: (props) => {
-      updateTile({
-        // eslint-disable-next-line react/prop-types
-        rowNum: props.rowNum,
-        // eslint-disable-next-line react/prop-types
-        columnNum: props.columnNum,
-        // eslint-disable-next-line react/prop-types
-        tileBackground: props.tileBackground,
-        dropTileSize: props.tileSize,
-      });
+      updateTile(xPos, yPos, { rowNum: props.rowNum, columnNum: props.columnNum, background: props.tileBackground });
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -61,9 +51,9 @@ function Tile({ tileSize, scale }) {
 
   return (
     <div style={style} ref={drop}>
-      {tile === null
+      {tileBackground === null
         ? EmptyTile()
-        : <AutoScale><FilledTile tileInfo={tile} tileSize={tileSize} /></AutoScale>}
+        : <AutoScale><FilledTile tileBackground={tileBackground} tileSize={tileSize} /></AutoScale>}
       {isOver && (
         <div
           style={{
@@ -82,9 +72,23 @@ function Tile({ tileSize, scale }) {
   );
 }
 
+Tile.defaultProps = {
+  tileBackground: null,
+};
+
 Tile.propTypes = {
+  xPos: PropTypes.number.isRequired,
+  yPos: PropTypes.number.isRequired,
+  tileBackground: PropTypes.shape({
+    background: PropTypes.shape({
+      background: PropTypes.string.isRequired,
+    }),
+    rowNum: PropTypes.number.isRequired,
+    columnNum: PropTypes.number.isRequired,
+  }),
   tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   scale: PropTypes.number.isRequired,
+  updateTile: PropTypes.func.isRequired,
 };
 
 // Note: tileInfo.tileSize is the tileSize of the tileSetTile being dragged into the tile.
@@ -92,13 +96,12 @@ Tile.propTypes = {
 // should propbably be thrown.
 FilledTile.propTypes = {
   tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
-  tileInfo: PropTypes.shape({
+  tileBackground: PropTypes.shape({
+    background: PropTypes.shape({
+      background: PropTypes.string.isRequired,
+    }),
     rowNum: PropTypes.number.isRequired,
     columnNum: PropTypes.number.isRequired,
-    tileBackground: PropTypes.shape({
-      background: PropTypes.string.isRequired,
-    }).isRequired,
-    dropTileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   }).isRequired,
 };
 
