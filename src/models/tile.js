@@ -11,7 +11,17 @@ class Tile {
   }
 
   toJSON() {
-    return { tileBackground: this.tileBackground, key: this.key };
+    let backgroundInfo;
+    if (this.tileBackground !== null) {
+      backgroundInfo = {
+        tileRowNum: this.tileBackground.rowNum,
+        tileColNum: this.tileBackground.columnNum,
+        tileSetName: this.tileBackground.tileSetName,
+      };
+    } else {
+      backgroundInfo = this.tileBackground;
+    }
+    return { tileBackground: backgroundInfo, key: this.key };
   }
 }
 
