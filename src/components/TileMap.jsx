@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 
@@ -14,9 +13,10 @@ function TileMap({ mapInfo }) {
 
   const [tileMap, updateTileMap] = useState([]);
   useEffect(() => {
-    const matrix = Array.from({ length: rows }, (_, rowNum) => Array.from({ length: columns }, (__, colNum) => new TileModel(colNum, rowNum, null, [width, height], 2)));
+    // The next 2 lines simply create a 2d matrix filled with TileModels for each spot in matrix.
+    const matrix = Array.from({ length: rows }, (_, rowNum) => Array.from({ length: columns },
+      (__, colNum) => new TileModel(colNum, rowNum, null, [width, height], 2)));
     updateTileMap(matrix);
-    console.log("I ran");
   }, [rows, columns, width, height]);
 
   function updateTile(xPos, yPos, tileBackground) {
@@ -27,7 +27,13 @@ function TileMap({ mapInfo }) {
 
   return (
     <Grid container direction="column">
-      {tileMap.map((row) => <TileMapRow row={row} key={uuid()} updateTile={updateTile} />)}
+      {tileMap.map((row) => (
+        <TileMapRow
+          row={row}
+          key={JSON.stringify(row)}
+          updateTile={updateTile}
+        />
+      ))}
     </Grid>
   );
 }
@@ -35,7 +41,18 @@ function TileMap({ mapInfo }) {
 function TileMapRow({ row, updateTile }) {
   return (
     <Grid container>
-      {row.map((tileInfo) => <Grid item key={uuid()}><Tile xPos={tileInfo.xPos} yPos={tileInfo.yPos} tileBackground={tileInfo.tileBackground} tileSize={tileInfo.tileSize} scale={tileInfo.scale} updateTile={updateTile} /></Grid>)}
+      {row.map((tileInfo) => (
+        <Grid item key={tileInfo.key}>
+          <Tile
+            xPos={tileInfo.xPos}
+            yPos={tileInfo.yPos}
+            tileBackground={tileInfo.tileBackground}
+            tileSize={tileInfo.tileSize}
+            scale={tileInfo.scale}
+            updateTile={updateTile}
+          />
+        </Grid>
+      ))}
     </Grid>
   );
 }

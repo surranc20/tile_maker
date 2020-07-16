@@ -41,7 +41,13 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.DROPTILE,
     drop: (props) => {
-      updateTile(xPos, yPos, { rowNum: props.rowNum, columnNum: props.columnNum, background: props.tileBackground });
+      updateTile(xPos, yPos, {
+        // eslint-disable-next-line react/prop-types
+        rowNum: props.rowNum,
+        // eslint-disable-next-line react/prop-types
+        columnNum: props.columnNum,
+        background: props.tileBackground,
+      });
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
