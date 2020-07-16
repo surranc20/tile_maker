@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
-import AutoScale from 'react-auto-scale';
 import { ItemTypes } from './ItemTypes';
 
 function EmptyTile() {
@@ -61,7 +60,7 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
     <div style={style} ref={drop}>
       {tileBackground === null
         ? EmptyTile()
-        : <AutoScale><FilledTile tileBackground={tileBackground} tileSize={tileSize} /></AutoScale>}
+        : <FilledTile tileBackground={tileBackground} tileSize={tileSize} />}
       {isOver && (
         <div
           style={{
