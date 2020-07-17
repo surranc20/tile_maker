@@ -22,7 +22,7 @@ function App() {
             />
           </Grid>
           <Grid item sm={8}>
-            <TileMapSpot />
+            <TileMapSpot tilesets={tileSets} />
           </Grid>
         </Grid>
       </DndProvider>

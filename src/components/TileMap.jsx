@@ -7,6 +7,7 @@ import TileModel from '../models/tile';
 import TileRowModel from '../models/tile_row';
 import Tile from './Tile';
 import TileMapInfoForm from './TileMapInfoForm';
+import LoadMap from './LoadMap';
 
 function TileMap({ mapInfo }) {
   const {
@@ -32,7 +33,7 @@ function TileMap({ mapInfo }) {
 
   async function downloadFile() {
     const filename = `${name}_tiled.json`;
-    const jsonStr = JSON.stringify(tileMap);
+    const jsonStr = JSON.stringify({ mapArray: tileMap, mapInfo });
 
     const element = document.createElement('a');
     element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(jsonStr)}`);
@@ -86,18 +87,36 @@ function TileMapRow({ row, updateTile }) {
   );
 }
 
-function TileMapSpot() {
+function TileMapSpot({ tilesets }) {
   const [formInfo, updateFormInfo] = useState(null);
+  const [loadedTileMap, updateLoadedTileMap] = useState(null);
   const style = {
-    height: '70vmin',
+    minHeight: '70vmin',
     padding: '1px',
     overflow: 'auto',
   };
+
+  if (formInfo === null) {
+    style.overflow = 'hidden';
+  }
   return (
     <div style={style}>
       {formInfo === null
-        ? <TileMapInfoForm updateFormInfo={updateFormInfo} />
-        : <TileMap mapInfo={formInfo} />}
+        ? (
+          <Grid container adirection="column" spacing={2}>
+            <Grid item>
+              <TileMapInfoForm updateFormInfo={updateFormInfo} />
+            </Grid>
+            <Grid item>
+              <LoadMap
+                tilesets={tilesets}
+                updateFormInfo={updateFormInfo}
+                updateLoadedTileMap={updateLoadedTileMap}
+              />
+            </Grid>
+          </Grid>
+        )
+        : <TileMap mapInfo={formInfo} loadedTileMap={loadedTileMap} />}
     </div>
   );
 }
@@ -115,6 +134,10 @@ TileMap.propTypes = {
 TileMapRow.propTypes = {
   row: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateTile: PropTypes.func.isRequired,
+};
+
+TileMapSpot.propTypes = {
+  tilesets: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TileMapSpot;

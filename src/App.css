@@ -24,10 +24,25 @@
   padding-bottom: 50px;
 }
 
+.CheckingValidity {
+  padding-top: 10px;
+}
 
+.CheckingValidity h2 {
+  font-family: 'Pokemon Solid', Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  color: #ffcb03;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #3e569e;
+  letter-spacing: 3px;
+}
 
 .FileUpload {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .FileUpload .MuiDropzoneArea-root {
