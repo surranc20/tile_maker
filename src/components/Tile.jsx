@@ -38,7 +38,6 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
     height: tileSize[1] * scale,
     position: 'relative',
   };
-
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.DROPTILE,
     drop: (props) => {

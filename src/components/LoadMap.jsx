@@ -43,7 +43,9 @@ function LoadMap({ tilesets, updateFormInfo, updateLoadedTileMap }) {
 }
 
 LoadMap.propTypes = {
-  tilesets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // PropTypes does not support map
+  // eslint-disable-next-line react/forbid-prop-types
+  tilesets: PropTypes.object.isRequired,
   updateFormInfo: PropTypes.func.isRequired,
   updateLoadedTileMap: PropTypes.func.isRequired,
 };

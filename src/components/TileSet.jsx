@@ -7,41 +7,31 @@ import TileSetTile from './TileSetTile';
 function DisplayTileSet({ tileSets }) {
   const [tileArray, setTileArray] = useState([]);
   const tileSize = [16, 16];
-  const tileSetName = tileSets[0].name;
-
   // Break tilesheet png into tiles and add all these tiles to an array to display.
   useEffect(() => {
-    const reader = new FileReader();
-    reader.readAsDataURL(tileSets[0]);
-    reader.onload = () => {
-      const { result } = reader;
-      const img = new Image(); // Will be used to get the dimensions of the sheet.
-      img.src = result;
+    const [tileSetName, img] = tileSets.entries().next().value;
 
-      // Get the dimensions of the sheet and then create the array of tiles.
-      img.onload = () => {
-        const rows = parseInt(img.height / tileSize[1], 10);
-        const columns = parseInt(img.width / tileSize[0], 10);
+    // Get the dimensions of the sheet and then create the array of tiles.
+    const rows = parseInt(img.height / tileSize[1], 10);
+    const columns = parseInt(img.width / tileSize[0], 10);
 
-        // Create a 2d array with the same shape as our tile sheet.
-        const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(0));
+    // Create a 2d array with the same shape as our tile sheet.
+    const matrix = Array(rows).fill(0).map(() => new Array(columns).fill(0));
 
-        // Use this array to create an array filled with tiles.
-        const tileSetMatrix = matrix.map((row, rowIndex) => row.map((column, columnIndex) => (
-          <TileSetTile
-            tileBackground={{ background: `url(${result})` }}
-            rowNum={rowIndex}
-            columnNum={columnIndex}
-            tileSize={tileSize}
-            tileSetName={tileSetName}
-          />
-        )));
+    // Use this array to create an array filled with tiles.
+    const tileSetMatrix = matrix.map((row, rowIndex) => row.map((column, columnIndex) => (
+      <TileSetTile
+        tileBackground={{ background: `url(${img.src})` }}
+        rowNum={rowIndex}
+        columnNum={columnIndex}
+        tileSize={tileSize}
+        tileSetName={tileSetName}
+      />
+    )));
 
-        // Flatten array so that it can be mapped in a grid.
-        const tileSetArray = tileSetMatrix.flat();
-        setTileArray(tileSetArray);
-      };
-    };
+    // Flatten array so that it can be mapped in a grid.
+    const tileSetArray = tileSetMatrix.flat();
+    setTileArray(tileSetArray);
   }, [tileSets]);
 
   return (
@@ -68,7 +58,9 @@ function TileSet({ tileArray }) {
 }
 
 DisplayTileSet.propTypes = {
-  tileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // PropTypes does not support map
+  // eslint-disable-next-line react/forbid-prop-types
+  tileSets: PropTypes.object.isRequired,
 };
 
 TileSet.propTypes = {

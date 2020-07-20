@@ -8,7 +8,7 @@ import TileMapSpot from './components/TileMap';
 import './App.css';
 
 function App() {
-  const [tileSets, updateTileSets] = useState([]);
+  const [tileSets, updateTileSets] = useState(new Map());
 
   return (
     <div className="App">

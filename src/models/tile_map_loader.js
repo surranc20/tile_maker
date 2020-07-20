@@ -19,22 +19,25 @@ class TileMapLoader {
         if (json.mapInfo === undefined) {
           return false;
         }
-        // Check tileset compatability
-        const loadedTilesetNames = this.loadedTileSets.map((tilesetFile) => tilesetFile.name);
 
-        // A for loop just makes so much more sense here...
+        // A for loop just makes so much more sense than a map here...
+        // Create the mapArray portion of the map here based on the loaded file
         const mapArray = [];
         for (const [rowNum, tileRow] of json.mapArray.entries()) {
           const row = [];
           for (const [colNum, tile] of tileRow.entries()) {
-            row.push(new Tile(colNum, rowNum, { ...tile.tileBackground }, [json.mapInfo.width, json.mapInfo.height], 2));
+            const img = this.loadedTileSets.get(tile.tileBackground.tileSetName);
+            const background = { background: `url(${img.src})` };
+            row.push(new Tile(colNum, rowNum, { ...tile.tileBackground, background },
+              [json.mapInfo.width, json.mapInfo.height], 2));
           }
           mapArray.push(new TileRow(row));
         }
-
-        console.log(mapArray);
         updateTileMap(mapArray);
+
+        // Don't forget to also include the mapInfo (name, col...) from the loaded file.
         updateFormInfo(json.mapInfo);
+        return true;
       } catch (error) {
         console.log(error);
         return false;

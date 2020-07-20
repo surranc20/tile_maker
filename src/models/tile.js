@@ -14,8 +14,8 @@ class Tile {
     let backgroundInfo;
     if (this.tileBackground !== null) {
       backgroundInfo = {
-        tileRowNum: this.tileBackground.rowNum,
-        tileColNum: this.tileBackground.columnNum,
+        rowNum: this.tileBackground.rowNum,
+        columnNum: this.tileBackground.columnNum,
         tileSetName: this.tileBackground.tileSetName,
       };
     } else {

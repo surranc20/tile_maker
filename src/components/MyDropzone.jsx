@@ -8,10 +8,18 @@ function FileUpload({ tileSets, updateTileSets }) {
     // This code runs whenever a file is accepted by the dropzone.
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
+      reader.readAsDataURL(file);
+
       reader.onload = () => {
-        acceptedFileHandler(tileSets.concat([file]));
+        const { result } = reader;
+        const img = new Image(); // Will be used to get the dimensions of the sheet.
+        img.src = result;
+        img.onload = () => {
+          const tempTileSets = new Map(...tileSets);
+          tempTileSets.set(file.name, img);
+          acceptedFileHandler(tempTileSets);
+        };
       };
-      reader.readAsArrayBuffer(file);
     });
   }, [acceptedFileHandler, tileSets]);
 
@@ -28,7 +36,9 @@ function FileUpload({ tileSets, updateTileSets }) {
 }
 
 FileUpload.propTypes = {
-  tileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // PropTypes does not support a map
+  // eslint-disable-next-line react/forbid-prop-types
+  tileSets: PropTypes.object.isRequired,
   updateTileSets: PropTypes.func.isRequired,
 };
 

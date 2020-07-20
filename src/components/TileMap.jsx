@@ -9,7 +9,7 @@ import Tile from './Tile';
 import TileMapInfoForm from './TileMapInfoForm';
 import LoadMap from './LoadMap';
 
-function TileMap({ mapInfo }) {
+function TileMap({ mapInfo, loadedTileMap }) {
   const {
     rows, columns, width, height, name,
   } = mapInfo;
@@ -18,6 +18,10 @@ function TileMap({ mapInfo }) {
   useEffect(() => {
     // The next three lines simply create an array filled with tile rows. These
     // rows each hold their own uinque key as well as the tiles that comprise the row.
+    if (loadedTileMap !== null) {
+      updateTileMap(loadedTileMap);
+      return;
+    }
     const matrix = Array.from({ length: rows },
       (_, rowNum) => new TileRowModel(Array.from({ length: columns },
         (__, colNum) => new TileModel(colNum, rowNum, null, [width, height], 2))));
@@ -129,6 +133,7 @@ TileMap.propTypes = {
     height: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
+  loadedTileMap: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 TileMapRow.propTypes = {
@@ -137,7 +142,9 @@ TileMapRow.propTypes = {
 };
 
 TileMapSpot.propTypes = {
-  tilesets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // PropTypes does not support map
+  // eslint-disable-next-line react/forbid-prop-types
+  tilesets: PropTypes.object.isRequired,
 };
 
 export default TileMapSpot;

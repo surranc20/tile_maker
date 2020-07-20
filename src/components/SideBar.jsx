@@ -11,7 +11,7 @@ function SideBar({ tileSets, updateTileSets }) {
 
   return (
     <div style={style}>
-      {tileSets.length === 0
+      {tileSets.size === 0
         ? (
           <MyDropzone
             tileSets={tileSets}
@@ -24,7 +24,9 @@ function SideBar({ tileSets, updateTileSets }) {
 }
 
 SideBar.propTypes = {
-  tileSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // PropTypes does not support map
+  // eslint-disable-next-line react/forbid-prop-types
+  tileSets: PropTypes.object.isRequired,
   updateTileSets: PropTypes.func.isRequired,
 };
 
