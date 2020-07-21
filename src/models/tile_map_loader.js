@@ -35,9 +35,9 @@ class TileMapLoader {
           }
           mapArray.push(new TileRow(row));
         }
-        updateTileMap(mapArray);
 
-        // Don't forget to also include the mapInfo (name, col...) from the loaded file.
+        // Update the state of the load map component.
+        updateTileMap(mapArray);
         updateFormInfo(json.mapInfo);
         return true;
       } catch (error) {
