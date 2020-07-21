@@ -107,7 +107,7 @@ function TileMapSpot({ tilesets }) {
     <div style={style}>
       {formInfo === null
         ? (
-          <Grid container adirection="column" spacing={2}>
+          <Grid container adirection="column" spacing={2} justify="center" alignItems="center">
             <Grid item>
               <TileMapInfoForm updateFormInfo={updateFormInfo} />
             </Grid>
