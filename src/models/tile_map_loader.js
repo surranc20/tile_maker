@@ -8,16 +8,18 @@ class TileMapLoader {
     this.loadedTileSets = loadedTilesets;
   }
 
-  loadMap(updateFormInfo, updateTileMap) {
+  loadMap(updateFormInfo, updateTileMap, setDropFailed, updateCheckingValidity) {
     const reader = new FileReader();
     reader.addEventListener('load', (loadEvent) => {
       try {
         const json = JSON.parse(loadEvent.target.result);
         if (json.mapArray === undefined) {
-          return false;
+          setDropFailed(true);
+          return updateCheckingValidity(false);
         }
         if (json.mapInfo === undefined) {
-          return false;
+          setDropFailed(true);
+          return updateCheckingValidity(false);
         }
 
         // A for loop just makes so much more sense than a map here...
@@ -39,8 +41,8 @@ class TileMapLoader {
         updateFormInfo(json.mapInfo);
         return true;
       } catch (error) {
-        console.log(error);
-        return false;
+        setDropFailed(true);
+        return updateCheckingValidity(false);
       }
     });
     reader.readAsText(this.file);

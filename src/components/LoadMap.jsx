@@ -7,6 +7,7 @@ import TileMapLoader from '../models/tile_map_loader';
 
 function LoadMap({ tilesets, updateFormInfo, updateLoadedTileMap }) {
   const [checkingValidity, updateCheckingValidity] = useState(false);
+  const [dropFailed, setDropFailed] = useState(false);
   const onDrop = useCallback((acceptedFiles) => {
     // This code runs whenever a file is accepted by the dropzone.
     acceptedFiles.forEach((file) => {
@@ -14,12 +15,16 @@ function LoadMap({ tilesets, updateFormInfo, updateLoadedTileMap }) {
       reader.onload = () => {
         updateCheckingValidity(true);
         const mapLoader = new TileMapLoader(file, tilesets);
-        mapLoader.loadMap(updateFormInfo, updateLoadedTileMap);
+        mapLoader.loadMap(updateFormInfo, updateLoadedTileMap,
+          setDropFailed, updateCheckingValidity);
       };
       reader.readAsArrayBuffer(file);
     });
   }, [tilesets]);
 
+  const dropText = (dropFailed
+    ? 'Failed to upload map! Please make sure all required tilesets are uploaded. (If trouble persists the tile map file is likely corrupted.'
+    : 'Drag an in-progress tile map here. Make sure you have already uploaded the corresponding tilesets!');
   return (
     <div className="FileUpload">
       {checkingValidity
@@ -34,7 +39,7 @@ function LoadMap({ tilesets, updateFormInfo, updateLoadedTileMap }) {
             onDrop={onDrop}
             filesLimit={1}
             acceptedFiles={['.json']}
-            dropzoneText="Drag an in-progress tile map here. Make sure you have already uploaded the corresponding tilesets!"
+            dropzoneText={dropText}
           />
         )}
 
