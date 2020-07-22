@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import PropTypes from 'prop-types';
-import { ItemTypes } from './ItemTypes';
+import { ItemTypes } from '../models/ItemTypes';
 
 // eslint-disable-next-line object-curly-newline
 function TileSetTile({ tileBackground, rowNum, columnNum, tileSize, tileSetName }) {
