@@ -1,20 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ButtonBase } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 
-function EmptyTile() {
+function EmptyTile({ showCollide, isCollidable }) {
   const style = {
     outline: '1px solid #3e569e',
     width: '100%',
     height: '100%',
   };
   return (
-    <div style={style} />
+    <div style={style}>
+
+      <ShowCollideTile showCollide={showCollide} isCollidable={isCollidable} />
+
+    </div>
   );
 }
 
-function FilledTile({ tileBackground, tileSize, scale }) {
+function FilledTile({
+  tileBackground, tileSize, scale, showCollide, isCollidable,
+}) {
   const { background, rowNum, columnNum } = tileBackground;
 
   const xBackgroundOffset = -columnNum * tileSize[0];
@@ -27,17 +34,44 @@ function FilledTile({ tileBackground, tileSize, scale }) {
     transformOrigin: 'left top',
   };
   return (
-    <div style={{ ...background, ...style }} />
+    <div style={{ ...background, ...style }}>
+      <ShowCollideTile showCollide={showCollide} isCollidable={isCollidable} />
+    </div>
+  );
+}
+
+function ShowCollideTile({ showCollide, isCollidable }) {
+  const style = {
+    width: '100%',
+    height: '100%',
+  };
+
+  if (showCollide) {
+    if (isCollidable) {
+      style.background = 'rgba(255, 0, 0, 0.5)';
+    } else {
+      style.background = 'rgba(0, 255, 0, 0.5)';
+    }
+  }
+
+  return (
+    <div style={style} />
   );
 }
 
 // eslint-disable-next-line object-curly-newline
-function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
+function Tile(
+  {
+    xPos, yPos, tileBackground, tileSize, scale, updateTile,
+    showCollide, isCollidable, updateTileCollidability,
+  },
+) {
   const style = {
     width: tileSize[0] * scale,
     height: tileSize[1] * scale,
     position: 'relative',
   };
+
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.DROPTILE,
     drop: (props) => {
@@ -57,26 +91,46 @@ function Tile({ xPos, yPos, tileBackground, tileSize, scale, updateTile }) {
     }),
   });
 
+  function setTileCollidability() {
+    if (showCollide) {
+      updateTileCollidability(xPos, yPos, !isCollidable);
+    }
+  }
+
   return (
-    <div style={style} ref={drop}>
-      {tileBackground === null
-        ? EmptyTile()
-        : <FilledTile tileBackground={tileBackground} tileSize={tileSize} scale={scale} />}
-      {isOver && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            zIndex: 1,
-            opacity: 0.9,
-            backgroundColor: '#ffcb03',
-          }}
-        />
-      )}
-    </div>
+    <ButtonBase
+      style={{ width: tileSize[0] * scale, height: tileSize[1] * scale }}
+      onClick={setTileCollidability}
+    >
+      <div style={style} ref={drop}>
+        {tileBackground === null
+          ? <EmptyTile showCollide={showCollide} isCollidable={isCollidable} />
+          : (
+            <FilledTile
+              tileBackground={tileBackground}
+              tileSize={tileSize}
+              scale={scale}
+              showCollide={showCollide}
+              isCollidable={isCollidable}
+            />
+          )}
+
+        {isOver && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: '100%',
+              width: '100%',
+              zIndex: 1,
+              opacity: 0.9,
+              backgroundColor: '#ffcb03',
+            }}
+          />
+        )}
+      </div>
+    </ButtonBase>
   );
 }
 
@@ -97,6 +151,9 @@ Tile.propTypes = {
   tileSize: PropTypes.arrayOf(PropTypes.number).isRequired,
   scale: PropTypes.number.isRequired,
   updateTile: PropTypes.func.isRequired,
+  updateTileCollidability: PropTypes.func.isRequired,
+  showCollide: PropTypes.bool.isRequired,
+  isCollidable: PropTypes.bool.isRequired,
 };
 
 // Note: tileInfo.tileSize is the tileSize of the tileSetTile being dragged into the tile.
@@ -112,6 +169,18 @@ FilledTile.propTypes = {
     columnNum: PropTypes.number.isRequired,
   }).isRequired,
   scale: PropTypes.number.isRequired,
+  showCollide: PropTypes.bool.isRequired,
+  isCollidable: PropTypes.bool.isRequired,
+};
+
+EmptyTile.propTypes = {
+  showCollide: PropTypes.bool.isRequired,
+  isCollidable: PropTypes.bool.isRequired,
+};
+
+ShowCollideTile.propTypes = {
+  showCollide: PropTypes.bool.isRequired,
+  isCollidable: PropTypes.bool.isRequired,
 };
 
 export default Tile;

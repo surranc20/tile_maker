@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { Button } from '@material-ui/core';
+import { Button, IconButton, Tooltip } from '@material-ui/core';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import TileModel from '../models/tile';
 import TileRowModel from '../models/tile_row';
@@ -15,6 +17,8 @@ function TileMap({ mapInfo, loadedTileMap }) {
   } = mapInfo;
 
   const [tileMap, updateTileMap] = useState([]);
+  const [showCollide, updateShowCollide] = useState(false);
+
   useEffect(() => {
     // The next three lines simply create an array filled with tile rows. These
     // rows each hold their own uinque key as well as the tiles that comprise the row.
@@ -35,6 +39,12 @@ function TileMap({ mapInfo, loadedTileMap }) {
     updateTileMap(tempTileMap);
   }
 
+  function updateTileCollidability(xPos, yPos, isCollidable) {
+    const tempTileMap = [...tileMap];
+    tempTileMap[yPos].row[xPos].collidable = isCollidable;
+    updateTileMap(tempTileMap);
+  }
+
   async function downloadFile() {
     const filename = `${name}_tiled.json`;
     const jsonStr = JSON.stringify({ mapArray: tileMap, mapInfo });
@@ -52,27 +62,44 @@ function TileMap({ mapInfo, loadedTileMap }) {
   }
 
   return (
-    <Grid container direction="column">
-      {tileMap.map((tileRow) => (
-        <TileMapRow
-          row={tileRow.row}
-          key={tileRow.key}
-          updateTile={updateTile}
-        />
-      ))}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={downloadFile}
-        style={{ height: '56px' }}
-      >
-        Create Map
-      </Button>
+    <Grid container direction="column" spacing={2} justify="center" alignItems="center">
+      <Grid item>
+        {tileMap.map((tileRow) => (
+          <TileMapRow
+            row={tileRow.row}
+            key={tileRow.key}
+            updateTile={updateTile}
+            updateTileCollidability={updateTileCollidability}
+            showCollide={showCollide}
+          />
+        ))}
+      </Grid>
+      <Grid container item justify="center" alignItems="center">
+        <Grid item>
+          <Tooltip title="Toggle collide map visibility">
+            <IconButton color="primary" aria-label="Toggle Show Collide Map" onClick={() => updateShowCollide(!showCollide)}>
+              {showCollide ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={downloadFile}
+            style={{ height: '56px' }}
+          >
+            Create Map
+          </Button>
+        </Grid>
+      </Grid>
     </Grid>
   );
 }
 
-function TileMapRow({ row, updateTile }) {
+function TileMapRow({
+  row, updateTile, showCollide, updateTileCollidability,
+}) {
   return (
     <Grid container>
       {row.map((tileInfo) => (
@@ -84,6 +111,9 @@ function TileMapRow({ row, updateTile }) {
             tileSize={tileInfo.tileSize}
             scale={tileInfo.scale}
             updateTile={updateTile}
+            updateTileCollidability={updateTileCollidability}
+            showCollide={showCollide}
+            isCollidable={tileInfo.collidable}
           />
         </Grid>
       ))}
@@ -139,6 +169,8 @@ TileMap.propTypes = {
 TileMapRow.propTypes = {
   row: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateTile: PropTypes.func.isRequired,
+  showCollide: PropTypes.bool.isRequired,
+  updateTileCollidability: PropTypes.func.isRequired,
 };
 
 TileMapSpot.propTypes = {
