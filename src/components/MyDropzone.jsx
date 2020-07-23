@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { DropzoneArea } from 'material-ui-dropzone';
+import cloneDeep from 'lodash/cloneDeep';
 
 function FileUpload({ tileSets, updateTileSets }) {
   const acceptedFileHandler = updateTileSets;
@@ -15,7 +16,7 @@ function FileUpload({ tileSets, updateTileSets }) {
         const img = new Image(); // Will be used to get the dimensions of the sheet.
         img.src = result;
         img.onload = () => {
-          const tempTileSets = new Map(...tileSets);
+          const tempTileSets = cloneDeep(tileSets);
           tempTileSets.set(file.name, img);
           acceptedFileHandler(tempTileSets);
         };
@@ -24,12 +25,13 @@ function FileUpload({ tileSets, updateTileSets }) {
   }, [acceptedFileHandler, tileSets]);
 
   return (
-    <div className="FileUpload">
+    <div className="FileUpload" style={{ marginTop: '20px' }}>
       <DropzoneArea
         onDrop={onDrop}
         filesLimit={1}
         acceptedFiles={['.png']}
         dropzoneText="Drag tile set here! (Or browse computer for tileset)"
+        showPreviewsInDropzone={false}
       />
     </div>
   );

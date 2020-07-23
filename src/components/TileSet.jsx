@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import TileSetTile from './TileSetTile';
 
-function DisplayTileSet({ tileSets }) {
+function DisplayTileSet({ tilesetInfo }) {
   const [tileArray, setTileArray] = useState([]);
   const tileSize = [16, 16];
   // Break tilesheet png into tiles and add all these tiles to an array to display.
   useEffect(() => {
-    const [tileSetName, img] = tileSets.entries().next().value;
+    const [tileSetName, img] = tilesetInfo;
 
     // Get the dimensions of the sheet and then create the array of tiles.
     const rows = parseInt(img.height / tileSize[1], 10);
@@ -32,7 +32,7 @@ function DisplayTileSet({ tileSets }) {
     // Flatten array so that it can be mapped in a grid.
     const tileSetArray = tileSetMatrix.flat();
     setTileArray(tileSetArray);
-  }, [tileSets]);
+  }, [tilesetInfo]);
 
   return (
     <div>
@@ -60,7 +60,7 @@ function TileSet({ tileArray }) {
 DisplayTileSet.propTypes = {
   // PropTypes does not support map
   // eslint-disable-next-line react/forbid-prop-types
-  tileSets: PropTypes.object.isRequired,
+  tilesetInfo: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 TileSet.propTypes = {
