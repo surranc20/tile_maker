@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonBase } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
-import { ItemTypes } from './ItemTypes';
+import { ItemTypes } from '../models/ItemTypes';
 
 function EmptyTile({ showCollide, isCollidable }) {
   const style = {
