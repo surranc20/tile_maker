@@ -30,8 +30,9 @@ class TileMapLoader {
           for (const [colNum, tile] of tileRow.entries()) {
             const img = this.loadedTileSets.get(tile.tileBackground.tileSetName);
             const background = { background: `url(${img.src})` };
+
             row.push(new Tile(colNum, rowNum, { ...tile.tileBackground, background },
-              [json.mapInfo.width, json.mapInfo.height], 2));
+              [json.mapInfo.width, json.mapInfo.height], 2, tile.collidable));
           }
           mapArray.push(new TileRow(row));
         }
