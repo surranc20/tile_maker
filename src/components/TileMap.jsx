@@ -4,6 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import { Button, IconButton, Tooltip } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
 import TileModel from '../models/tile';
 import TileRowModel from '../models/tile_row';
@@ -36,6 +39,27 @@ function TileMap({ mapInfo, loadedTileMap }) {
   function updateTile(xPos, yPos, tileBackground) {
     const tempTileMap = [...tileMap];
     tempTileMap[yPos].row[xPos].tileBackground = tileBackground;
+    updateTileMap(tempTileMap);
+  }
+
+  function addLeft() {
+    const tempTileMap = [...tileMap];
+    tempTileMap.map((row) => row.addBlankLeft());
+    updateTileMap(tempTileMap);
+  }
+
+  function addRight() {
+    const tempTileMap = [...tileMap];
+    tempTileMap.map((row) => row.addBlankRight());
+    updateTileMap(tempTileMap);
+  }
+
+  function addUp() {
+    const tempTileMap = [...tileMap];
+    const blankRow = new TileRowModel(Array.from({ length: tempTileMap[0].row.length },
+      (__, colNum) => new TileModel(colNum, 0, null, [width, height], 2)));
+    tempTileMap.unshift(blankRow);
+    tempTileMap.map((row) => row.dropYCoord(1));
     updateTileMap(tempTileMap);
   }
 
@@ -79,6 +103,27 @@ function TileMap({ mapInfo, loadedTileMap }) {
           <Tooltip title="Toggle collide map visibility">
             <IconButton color="primary" aria-label="Toggle Show Collide Map" onClick={() => updateShowCollide(!showCollide)}>
               {showCollide ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Add left column">
+            <IconButton color="primary" aria-label="Add left column" onClick={addLeft}>
+              <ArrowLeftIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Add right column">
+            <IconButton color="primary" aria-label="Add right column" onClick={addRight}>
+              <ArrowRightIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Add top column">
+            <IconButton color="primary" aria-label="Add top column" onClick={addUp}>
+              <ArrowDropUpIcon />
             </IconButton>
           </Tooltip>
         </Grid>
