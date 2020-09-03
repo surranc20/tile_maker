@@ -28,11 +28,15 @@ class TileMapLoader {
         for (const [rowNum, tileRow] of json.mapArray.entries()) {
           const row = [];
           for (const [colNum, tile] of tileRow.entries()) {
-            const img = this.loadedTileSets.get(tile.tileBackground.tileSetName);
-            const background = { background: `url(${img.src})` };
+            if (tile.tileBackground === null) {
+              row.push(new Tile(colNum, rowNum, {}, [json.mapInfo.width, json.mapInfo.height], 2));
+            } else {
+              const img = this.loadedTileSets.get(tile.tileBackground.tileSetName);
+              const background = { background: `url(${img.src})` };
 
-            row.push(new Tile(colNum, rowNum, { ...tile.tileBackground, background },
-              [json.mapInfo.width, json.mapInfo.height], 2, tile.collidable));
+              row.push(new Tile(colNum, rowNum, { ...tile.tileBackground, background },
+                [json.mapInfo.width, json.mapInfo.height], 2, tile.collidable));
+            }
           }
           mapArray.push(new TileRow(row));
         }
@@ -42,6 +46,7 @@ class TileMapLoader {
         updateFormInfo(json.mapInfo);
         return true;
       } catch (error) {
+        console.log(error);
         setDropFailed(true);
         return updateCheckingValidity(false);
       }
